@@ -1,0 +1,20 @@
+{
+    "name": "personal-website-engine",
+    "version": "0.1.0",
+    "author": "Ilya Lakhin <eliah.lakhin@gmail.com>",
+    "description": "Static website compilation engine",
+    "contributors": [
+        {
+            "name": "Ilya Lakhin",
+            "email": "eliah.lakhin@gmail.com"
+        }
+    ],
+    "devDependencies": {
+        "grunt": "~0.4.1",
+        "grunt-contrib-watch": "~0.4.4",
+        "grunt-exec": "~0.4.1"
+    },
+    "engines": {
+        "node": ">=0.10"
+    }
+}
