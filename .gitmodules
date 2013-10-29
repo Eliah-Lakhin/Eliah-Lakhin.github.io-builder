@@ -1,3 +1,6 @@
 [submodule "dest"]
 	path = dest
-	url = git@github.com:Eliah-Lakhin/Eliah-Lakhin.git
+	url = git@github.com:Eliah-Lakhin/Eliah-Lakhin.github.io.git
+[submodule "src"]
+	path = src
+	url = git@github.com:Eliah-Lakhin/Eliah-Lakhin-sources.git
