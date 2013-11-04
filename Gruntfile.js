@@ -9,11 +9,28 @@ module.exports = function(grunt) {
         jade: {
             template: {
                 options: {
-                    pretty: true
+                    pretty: true,
+                    data: grunt.file.readJSON('source/jade.json')
                 },
-                files: {
-                    'www/index.html': 'source/template/index.jade'
-                }
+                files: [
+                    {
+                        cwd: 'source/template/',
+                        src: ['**/*.jade', '!include/**'],
+                        ext: '.html',
+                        dest: 'www',
+                        expand: true
+                    }
+                ]
+            }
+        },
+
+        copy: {
+            asset: {
+                expand: true,
+                cwd: "source/asset/",
+                src: "**/*",
+                filter: 'isFile',
+                dest: "www/asset/"
             }
         },
 
@@ -25,10 +42,17 @@ module.exports = function(grunt) {
 
         watch: {
             jade: {
-                files: ['source/template/**/*.jade', 'source/article/**/*.md'],
+                files: ['source/template/**/*.jade', 'source/article/**/*.md',
+                    'source/jade.json'],
                 expand: true,
                 tasks: ['jade:template'],
                 options: {spawn: false}
+            },
+
+            assets: {
+                files: ['source/asset/**/*'],
+                expand: true,
+                tasks: ['copy/asset']
             }
         },
 
@@ -52,10 +76,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-jade');
     grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-exec');
 
-    grunt.registerTask('compile', ['jade:template']);
+    grunt.registerTask('compile', ['jade:template', 'copy:asset']);
+
     grunt.registerTask('checkMessageArg', function() {
         if (!grunt.option('message')) {
             grunt.fatal('"--message" argument is required');
