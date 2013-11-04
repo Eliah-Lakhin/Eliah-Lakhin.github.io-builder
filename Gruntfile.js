@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
     var commitCommand = 'git add .;' +
-        'git commit <%= grunt.option(\'message\') ? \'-m "\' + grunt.option(\'message\') + \'"\' : \'\' %>;' +
+        'git commit <%= \'-m "\' + grunt.option(\'message\') + \'"\' %>;' +
         'git push origin master;';
 
     grunt.initConfig({
@@ -56,8 +56,14 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-exec');
 
     grunt.registerTask('compile', ['jade:template']);
+    grunt.registerTask('checkMessageArg', function() {
+        if (!grunt.option('message')) {
+            grunt.fatal('"--message" argument is required');
+        }
+    });
 
-    grunt.registerTask('publish', ['exec:pushSource', 'exec:pushDest', 'exec:pushRoot']);
+    grunt.registerTask('publish', ['checkMessageArg', 'exec:pushSource',
+        'exec:pushDest', 'exec:pushRoot']);
 
     grunt.registerTask('default', ['compile', 'connect:preview', 'watch']);
 };
