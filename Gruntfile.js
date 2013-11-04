@@ -1,4 +1,8 @@
 module.exports = function(grunt) {
+    var commitCommand = 'git add .;' +
+        'git commit <%= grunt.option(\'message\') ? \'-m "\' + grunt.option(\'message\') + \'"\' : \'\' %>;' +
+        'git push origin master;';
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
@@ -28,19 +32,19 @@ module.exports = function(grunt) {
             }
         },
 
-        markdown: {
-            article: {
-                cwd: 'source/article',
-                src: ['**/*.md'],
-                expand: true,
-                dest: 'www/html/',
-                ext: '.html',
-                options: {
-                    template: 'source/article/template.txt',
-                    markdownOptions: {
+        exec: {
+            pushSource: {
+                cwd: 'source',
+                cmd: commitCommand
+            },
 
-                    }
-                }
+            pushDest: {
+                cwd: 'www',
+                cmd: commitCommand
+            },
+
+            pushRoot: {
+                cmd: commitCommand
             }
         }
     });
@@ -52,5 +56,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-exec');
 
     grunt.registerTask('compile', ['jade:template']);
+
+    grunt.registerTask('publish', ['exec:pushSource', 'exec:pushDest', 'exec:pushRoot']);
+
     grunt.registerTask('default', ['compile', 'connect:preview', 'watch']);
 };
