@@ -1,5 +1,5 @@
 module.exports = function(grunt) {
-    var commitCommand = 'git add .;' +
+    var commitCommand = 'git add -A .;' +
         'git commit <%= \'-m "\' + grunt.option(\'message\') + \'"\' %>;' +
         'git push origin master;';
 
@@ -39,9 +39,28 @@ module.exports = function(grunt) {
             }
         },
 
+        less: {
+            bootstrap: {
+                options: {
+                    paths: ['source/design'],
+                    cleancss: true
+                },
+
+                files: {
+                    'www/bootstrap.css': 'source/design/bootstrap.less',
+                    'www/bootstrap-theme.css': 'source/design/theme.less'
+                }
+            }
+        },
+
         connect: {
             preview: {
-                options: {base: 'www'}
+                options: {
+                    base: 'www',
+                    hostname: '*',
+                    port: 8000,
+                    livereload: 8080
+                }
             }
         },
 
@@ -54,7 +73,7 @@ module.exports = function(grunt) {
                 options: {spawn: false}
             },
 
-            assets: {
+            asset: {
                 expand: true,
                 files: 'source/asset/**/*',
                 tasks: 'copy:asset'
@@ -63,6 +82,17 @@ module.exports = function(grunt) {
             favicon: {
                 files: 'source/favicon.ico',
                 tasks: 'copy:favicon'
+            },
+
+            less: {
+                expand: true,
+                files: 'source/design/**/*.less',
+                tasks: 'less:bootstrap'
+            },
+
+            livereload: {
+                files: 'www/**/*',
+                options: {livereload: 8080}
             }
         },
 
@@ -87,11 +117,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jade');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-exec');
 
     grunt.registerTask('compile', ['jade:template', 'copy:asset',
-        'copy:favicon']);
+        'copy:favicon', 'less:bootstrap']);
 
     grunt.registerTask('checkMessageArg', function() {
         if (!grunt.option('message')) {
