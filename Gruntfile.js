@@ -25,17 +25,12 @@ module.exports = function(grunt) {
         },
 
         copy: {
-            asset: {
+            other: {
                 expand: true,
-                cwd: 'source/asset/',
-                src: '**/*',
+                cwd: 'source/other/',
+                src: ['**/*', '.nojekyll'],
                 filter: 'isFile',
-                dest: 'www/asset/'
-            },
-
-            favicon: {
-                src: 'source/favicon.ico',
-                dest: 'www/favicon.ico'
+                dest: 'www/'
             }
         },
 
@@ -79,15 +74,10 @@ module.exports = function(grunt) {
                 options: {spawn: false}
             },
 
-            asset: {
+            other: {
                 expand: true,
                 files: 'source/asset/**/*',
-                tasks: 'copy:asset'
-            },
-
-            favicon: {
-                files: 'source/favicon.ico',
-                tasks: 'copy:favicon'
+                tasks: 'copy:other'
             },
 
             less: {
@@ -127,8 +117,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-exec');
 
-    grunt.registerTask('compile', ['jade:template', 'copy:asset',
-        'copy:favicon', 'less']);
+    grunt.registerTask('compile', ['jade:template', 'copy:other', 'less']);
 
     grunt.registerTask('checkMessageArg', function() {
         if (!grunt.option('message')) {
