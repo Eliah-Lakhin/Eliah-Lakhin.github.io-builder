@@ -9,7 +9,7 @@ module.exports = function(grunt) {
         jade: {
             template: {
                 options: {
-                    pretty: true,
+                    pretty: false,
                     data: grunt.file.readJSON('source/jade.json')
                 },
                 files: [
@@ -46,10 +46,16 @@ module.exports = function(grunt) {
                     cleancss: true
                 },
 
-                files: {
-                    'www/bootstrap.css': 'source/design/bootstrap.less',
-                    'www/bootstrap-theme.css': 'source/design/theme.less'
-                }
+                files: {'www/bootstrap.css': 'source/design/bootstrap.less'}
+            },
+
+            bootstrapTheme: {
+                options: {
+                    paths: ['source/design'],
+                    cleancss: false
+                },
+
+                files: {'www/bootstrap-theme.css': 'source/design/theme.less'}
             }
         },
 
@@ -67,7 +73,7 @@ module.exports = function(grunt) {
         watch: {
             jade: {
                 files: ['source/template/**/*.jade', 'source/article/**/*.md',
-                    'source/jade.json'],
+                    'source/article/**/*.jade', 'source/jade.json'],
                 expand: true,
                 tasks: ['jade:template'],
                 options: {spawn: false}
@@ -87,7 +93,7 @@ module.exports = function(grunt) {
             less: {
                 expand: true,
                 files: 'source/design/**/*.less',
-                tasks: 'less:bootstrap'
+                tasks: 'less'
             },
 
             livereload: {
@@ -122,7 +128,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-exec');
 
     grunt.registerTask('compile', ['jade:template', 'copy:asset',
-        'copy:favicon', 'less:bootstrap']);
+        'copy:favicon', 'less']);
 
     grunt.registerTask('checkMessageArg', function() {
         if (!grunt.option('message')) {
