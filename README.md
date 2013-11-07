@@ -1,10 +1,10 @@
 Eliah-Lakhin.github.io-builder
 ================================
 
-Static website compilation engine, that I use to maintain my personal website:
+Static website compilation engine that I use to maintain my personal website:
 http://lakhin.com.
 
-It uses a [Grunt](http://gruntjs.com/) to build static website's content from
+It uses [Grunt](http://gruntjs.com/) to build static website's content from
 Jade, Less, Markdown, JSON sources.
 
 ### Setup
@@ -26,6 +26,6 @@ Jade, Less, Markdown, JSON sources.
    appropriate compilation subtasks, so `www` directory is staying in touch with
    sources while the developer editing them. Opened site's web pages are also
    reloading on destination static content changes using `livereload`.
-   `livereload` uses port 8080.
+   Livereload holds port 8080.
  * `grunt publish --message "<commit message>"` - commits all changes with
    `<commit message>`, and pushes them to appropriate GitHub's repositories.
