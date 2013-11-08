@@ -1,27 +1,53 @@
 module.exports = function(grunt) {
-    var commitCommand = 'git add -A .;' +
+    var marked = require('marked'),
+        highlightJS = require('highlight.js');
+
+    marked.setOptions({
+        highlight: function (code, lang) {
+            if (lang) {
+                return highlightJS.highlight(lang, code).value;
+            } else {
+                return code;
+            }
+        }
+    });
+
+    var extend = require('extend'),
+        commitCommand = 'git add -A .;' +
         'git commit <%= \'-m "\' + grunt.option(\'message\') + \'"\' %>;' +
         'git push origin master;';
+
+    var jade = function(custom, src, dst) {
+        var files = {},
+            config = grunt.file.readJSON('source/page.json');
+
+        files['www/' + dst] = 'source/page/' + src;
+
+        return {
+            options: {
+                data: extend({}, config, {
+                    page: config.pages[custom],
+                    functions: {
+                        titleToId: function(title) {
+                            return title
+                                .replace(new RegExp(' ', 'g'), '-')
+                                .toLowerCase();
+                        }
+                    }
+                })
+            },
+            files: files
+        };
+    };
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
         jade: {
-            template: {
-                options: {
-                    pretty: false,
-                    data: grunt.file.readJSON('source/jade.json')
-                },
-                files: [
-                    {
-                        cwd: 'source/template/',
-                        src: ['**/*.jade', '!include/**'],
-                        ext: '.html',
-                        dest: 'www',
-                        expand: true
-                    }
-                ]
-            }
+            index: jade('index', 'index.jade', 'index.html'),
+            projects: jade('projects', 'projects.jade', 'projects/index.html'),
+            'project-papa-carlo': jade('project-papa-carlo',
+                'projects/papa-carlo.jade', 'projects/papa-carlo/index.html')
         },
 
         copy: {
@@ -67,16 +93,16 @@ module.exports = function(grunt) {
 
         watch: {
             jade: {
-                files: ['source/template/**/*.jade', 'source/article/**/*.md',
-                    'source/article/**/*.jade', 'source/jade.json'],
+                files: ['source/page/**/*.jade', 'source/article/**/*.md',
+                    'source/article/**/*.jade', 'source/page.json'],
                 expand: true,
-                tasks: ['jade:template'],
+                tasks: ['jade'],
                 options: {spawn: false}
             },
 
             other: {
                 expand: true,
-                files: 'source/asset/**/*',
+                files: 'source/other/**/*',
                 tasks: 'copy:other'
             },
 
@@ -117,7 +143,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-exec');
 
-    grunt.registerTask('compile', ['jade:template', 'copy:other', 'less']);
+    grunt.registerTask('compile', ['jade', 'copy:other', 'less']);
 
     grunt.registerTask('checkMessageArg', function() {
         if (!grunt.option('message')) {
