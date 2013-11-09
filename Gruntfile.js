@@ -151,8 +151,8 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask('publish', ['checkMessageArg', 'exec:pushSource',
-        'exec:pushDest', 'exec:pushRoot']);
+    grunt.registerTask('publish', ['checkMessageArg', 'compile',
+        'exec:pushSource', 'exec:pushDest', 'exec:pushRoot']);
 
     grunt.registerTask('default', ['compile', 'connect:preview', 'watch']);
 };
