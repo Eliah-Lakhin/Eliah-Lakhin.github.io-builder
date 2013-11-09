@@ -45,9 +45,12 @@ module.exports = function(grunt) {
 
         jade: {
             index: jade('index', 'index.jade', 'index.html'),
+
             projects: jade('projects', 'projects.jade', 'projects/index.html'),
             'project-papa-carlo': jade('project-papa-carlo',
-                'projects/papa-carlo.jade', 'projects/papa-carlo/index.html')
+                'projects/papa-carlo.jade', 'projects/papa-carlo/index.html'),
+
+            blog: jade('blog', 'blog.jade', 'blog/index.html')
         },
 
         copy: {
