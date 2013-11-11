@@ -19,9 +19,9 @@ module.exports = function(grunt) {
 
     var jade = function(custom, src, dst) {
         var files = {},
-            config = grunt.file.readJSON('source/page.json');
+            config = grunt.file.readJSON('source/config.json');
 
-        files['www/' + dst] = 'source/page/' + src;
+        files['www/' + dst] = 'source/template/' + src;
 
         return {
             options: {
@@ -96,8 +96,8 @@ module.exports = function(grunt) {
 
         watch: {
             jade: {
-                files: ['source/page/**/*', 'source/article/**/*.md',
-                    'source/article/**/*.jade', 'source/page.json'],
+                files: ['source/template/**/*', 'source/content/**/*',
+                    'source/config.json'],
                 expand: true,
                 tasks: ['jade'],
                 options: {spawn: false}
