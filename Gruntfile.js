@@ -17,25 +17,46 @@ module.exports = function(grunt) {
         'git commit <%= \'-m "\' + grunt.option(\'message\') + \'"\' %>;' +
         'git push origin master;';
 
-    var jade = function(custom, src, dst) {
+    var titleToId = function(title) {
+            return title
+                .replace(new RegExp(' ', 'g'), '-')
+                .replace(new RegExp('--', 'g'), '')
+                .toLowerCase();
+        },
+        blogPostId = function(date, title) {
+            return date + '-' + titleToId(title);
+        },
+        getConfig = function() {
+            return grunt.file.readJSON('source/config.json');
+        };
+
+    var jade = function(pageName, src, dst, customData, customOptions) {
         var files = {},
-            config = grunt.file.readJSON('source/config.json');
+            config = getConfig();
 
         files['www/' + dst] = 'source/template/' + src;
 
         return {
-            options: {
+            options: extend({
                 data: extend({}, config, {
-                    page: config.pages[custom],
+                    page: config.pages[pageName],
                     functions: {
-                        titleToId: function(title) {
-                            return title
-                                .replace(new RegExp(' ', 'g'), '-')
-                                .toLowerCase();
+                        titleToId: titleToId,
+                        blogPostId: blogPostId,
+                        stringToDate: function(string) {
+                            var parsed = string
+                                .split(".")
+                                .map(function(component) {
+                                    return parseInt(component);
+                                });
+
+                            return new Date(parsed[2], parsed[1], parsed[0])
+                                .toUTCString()
                         }
-                    }
+                    },
+                    custom: customData || {}
                 })
-            },
+            }, customOptions || {}),
             files: files
         };
     };
@@ -43,7 +64,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
-        jade: {
+        jade: extend({
             index: jade('index', 'index.jade', 'index.html'),
 
             page404: jade('page404', 'page404.jade', '404.html'),
@@ -52,13 +73,52 @@ module.exports = function(grunt) {
             'project-papa-carlo': jade('project-papa-carlo',
                 'projects/papa-carlo.jade', 'projects/papa-carlo/index.html'),
 
-            blog: jade('blog', 'blog.jade', 'blog/index.html')
-        },
+            blog: jade('blog', 'blog.jade', 'blog/index.html'),
+
+            rssRu: jade('blog', 'rss.jade', 'blog/feed-ru.rss', {},
+                {pretty: true}),
+
+            rssEn: jade('blog', 'rss.jade', 'blog/feed.rss',
+                {filterEnglish: true}, {pretty: true})
+        }, (function() {
+            var blogConfig = getConfig().pages.blog,
+                blogTasks = {};
+            for (var index = 0, length = blogConfig.posts.length;
+                 index < length;
+                 index++) {
+                var post = blogConfig.posts[index];
+
+                if (post.content) {
+                    //TODO
+                } else {
+                    var id =  blogPostId(post.date, post.title),
+                        link = null;
+
+                    for (var refCaption in post.refs) {
+                        if (post.refs.hasOwnProperty(refCaption)) {
+                            link = post.refs[refCaption];
+                            break;
+                        }
+                    }
+
+                    if (link) {
+                        blogTasks['post-' + id] = jade(
+                            'redirect',
+                            'redirect.jade',
+                            'blog/' + id + '/index.html',
+                            {redirectUrl: link}
+                        );
+                    }
+                }
+            }
+
+            return blogTasks;
+        })()),
 
         copy: {
-            other: {
+            static: {
                 expand: true,
-                cwd: 'source/other/',
+                cwd: 'source/static/',
                 src: ['**/*', '.nojekyll'],
                 filter: 'isFile',
                 dest: 'www/'
@@ -105,10 +165,10 @@ module.exports = function(grunt) {
                 options: {spawn: false}
             },
 
-            other: {
+            static: {
                 expand: true,
-                files: 'source/other/**/*',
-                tasks: 'copy:other'
+                files: 'source/static/**/*',
+                tasks: 'copy:static'
             },
 
             less: {
@@ -148,7 +208,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-exec');
 
-    grunt.registerTask('compile', ['jade', 'copy:other', 'less']);
+    grunt.registerTask('compile', ['jade', 'copy:static', 'less']);
 
     grunt.registerTask('checkMessageArg', function() {
         if (!grunt.option('message')) {
