@@ -13,6 +13,7 @@ module.exports = function(grunt) {
     });
 
     var extend = require('extend'),
+        addCommand = 'git add -A .;',
         commitCommand = 'git add -A .;' +
         'git commit <%= \'-m "\' + grunt.option(\'message\') + \'"\' %>;' +
         'git push origin master;';
@@ -28,6 +29,15 @@ module.exports = function(grunt) {
         },
         getConfig = function() {
             return grunt.file.readJSON('source/config.json');
+        },
+        stringToDate = function(string) {
+            var parsed = string
+                .split('.')
+                .map(function(component) {
+                    return parseInt(component);
+                });
+
+            return new Date(parsed[2], parsed[1], parsed[0])
         };
 
     var jade = function(pageName, src, dst, customData, customOptions) {
@@ -36,6 +46,8 @@ module.exports = function(grunt) {
 
         files['www/' + dst] = 'source/template/' + src;
 
+        customData = extend({}, {page: pageName}, customData || {});
+
         return {
             options: extend({
                 data: extend({}, config, {
@@ -43,18 +55,16 @@ module.exports = function(grunt) {
                     functions: {
                         titleToId: titleToId,
                         blogPostId: blogPostId,
-                        stringToDate: function(string) {
-                            var parsed = string
-                                .split(".")
-                                .map(function(component) {
-                                    return parseInt(component);
-                                });
+                        stringToDate: stringToDate,
+                        formatBlogEntryDate: function(string) {
+                            var date = stringToDate(string),
+                                config = getConfig();
 
-                            return new Date(parsed[2], parsed[1], parsed[0])
-                                .toUTCString()
+                            return config.common.months[date.getUTCMonth()] +
+                                ' ' + date.getUTCFullYear();
                         }
                     },
-                    custom: customData || {}
+                    custom: customData
                 })
             }, customOptions || {}),
             files: files
@@ -65,7 +75,7 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
         jade: extend({
-            index: jade('index', 'index.jade', 'index.html'),
+            home: jade('home', 'home.jade', 'index.html'),
 
             page404: jade('page404', 'page404.jade', '404.html'),
 
@@ -132,16 +142,22 @@ module.exports = function(grunt) {
                     cleancss: true
                 },
 
-                files: {'www/bootstrap.css': 'source/design/bootstrap.less'}
+                files: {
+                    'www/bootstrap.css': 'source/design/bootstrap.less'
+                }
             },
 
-            bootstrapTheme: {
+            theme: {
                 options: {
                     paths: ['source/design'],
                     cleancss: false
                 },
 
-                files: {'www/bootstrap-theme.css': 'source/design/theme.less'}
+                files: {
+                    'www/theme.css': 'source/design/theme.less',
+                    'www/home.css': 'source/design/home.less',
+                    'www/blog.css': 'source/design/blog.less'
+                }
             }
         },
 
@@ -189,6 +205,11 @@ module.exports = function(grunt) {
                 cmd: commitCommand
             },
 
+            addDest: {
+                cwd: 'www',
+                cmd: addCommand
+            },
+
             pushDest: {
                 cwd: 'www',
                 cmd: commitCommand
@@ -218,6 +239,9 @@ module.exports = function(grunt) {
 
     grunt.registerTask('publish', ['checkMessageArg', 'compile',
         'exec:pushSource', 'exec:pushDest', 'exec:pushRoot']);
+
+    grunt.registerTask('save', ['checkMessageArg', 'compile',
+        'exec:pushSource', 'exec:addDest', 'exec:pushRoot']);
 
     grunt.registerTask('default', ['compile', 'connect:preview', 'watch']);
 };
