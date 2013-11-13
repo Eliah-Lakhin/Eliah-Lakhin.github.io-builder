@@ -61,9 +61,8 @@ module.exports = function(grunt) {
                             var date = stringToDate(string),
                                 config = getConfig();
 
-                            return config.common.months[date.getUTCMonth()] +
-                                ' ' + date.getUTCDate() +
-                                ', ' + date.getUTCFullYear();
+                            return config.common.months[date.getUTCMonth() - 1] +
+                                ' ' + date.getUTCFullYear();
                         }
                     },
                     custom: customData
