@@ -21,11 +21,12 @@ module.exports = function(grunt) {
     var titleToId = function(title) {
             return title
                 .replace(new RegExp(' ', 'g'), '-')
+                .replace(new RegExp('\\.', 'g'), '-')
                 .replace(new RegExp('--', 'g'), '')
                 .toLowerCase();
         },
-        blogPostId = function(date, title) {
-            return date + '-' + titleToId(title);
+        blogPostId = function(date, title, escape) {
+            return (escape ? titleToId(date) : date) + '-' + titleToId(title);
         },
         getConfig = function() {
             return grunt.file.readJSON('source/config.json');
@@ -61,7 +62,8 @@ module.exports = function(grunt) {
                                 config = getConfig();
 
                             return config.common.months[date.getUTCMonth()] +
-                                ' ' + date.getUTCFullYear();
+                                ' ' + date.getUTCDate() +
+                                ', ' + date.getUTCFullYear();
                         }
                     },
                     custom: customData
