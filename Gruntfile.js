@@ -38,7 +38,7 @@ module.exports = function(grunt) {
                     return parseInt(component);
                 });
 
-            return new Date(parsed[2], parsed[1], parsed[0])
+            return new Date(parsed[2], parsed[1] - 1, parsed[0])
         };
 
     var jade = function(pageName, src, dst, customData, customOptions) {
@@ -61,7 +61,7 @@ module.exports = function(grunt) {
                             var date = stringToDate(string),
                                 config = getConfig();
 
-                            return config.common.months[date.getUTCMonth() - 1] +
+                            return config.common.months[date.getUTCMonth()] +
                                 ' ' + date.getUTCFullYear();
                         }
                     },
@@ -97,13 +97,29 @@ module.exports = function(grunt) {
             for (var index = 0, length = blogConfig.posts.length;
                  index < length;
                  index++) {
-                var post = blogConfig.posts[index];
+                var post = blogConfig.posts[index],
+                    id =  blogPostId(post.date, post.title);
 
-                if (post.content) {
-                    //TODO
+                if (post.post) {
+                    var postUrl = '/blog/' + id + '/';
+
+                    blogTasks['post-' + id] = jade(
+                        'blog',
+                        'post.jade',
+                        'blog/' + id + '/index.html',
+                        {
+                            post: post,
+                            title: post.title,
+                            postUrl: postUrl,
+                            disqus: {
+                                threadId: 'blog/' + id,
+                                title: post.title,
+                                url: postUrl
+                            }
+                        }
+                    );
                 } else {
-                    var id =  blogPostId(post.date, post.title),
-                        link = null;
+                    var link = null;
 
                     for (var refCaption in post.refs) {
                         if (post.refs.hasOwnProperty(refCaption)) {
