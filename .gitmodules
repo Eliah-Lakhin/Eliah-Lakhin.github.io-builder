@@ -3,7 +3,7 @@
 	url = git@github.com:Eliah-Lakhin/Eliah-Lakhin.github.io.git
 [submodule "source"]
 	path = source
-	url = git@github.com:Eliah-Lakhin/Eliah-Lakhin-sources.git
+	url = git@github.com:Eliah-Lakhin/Eliah-Lakhin.github.io-sources.git
 [submodule "projects/papa-carlo"]
 	path = projects/papa-carlo
 	url = git@github.com:Eliah-Lakhin/papa-carlo.wiki
