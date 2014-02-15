@@ -4,6 +4,6 @@
 [submodule "source"]
 	path = source
 	url = git@github.com:Eliah-Lakhin/Eliah-Lakhin.github.io-sources.git
-[submodule "projects/papa-carlo"]
-	path = projects/papa-carlo
+[submodule "external/papa-carlo.wiki"]
+	path = external/papa-carlo.wik
 	url = git@github.com:Eliah-Lakhin/papa-carlo.wiki
