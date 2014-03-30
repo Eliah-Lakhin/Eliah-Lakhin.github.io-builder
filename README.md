@@ -10,12 +10,10 @@ Jade, Less, Markdown, JSON sources.
 ### Setup
 
 1. Install NodeJS and NPM.
-2. Install Grunt.
+2. Install Grunt-cli.
 3. `git clone git@github.com:Eliah-Lakhin/Eliah-Lakhin.github.io-builder.git`.
-4. `git submodule init`.
-5. `git submodule update`.
-6. `npm install`.
-7. `grunt compile` - should generate site and place outputs into `www` dir.
+4. `cd Eliah-Lakhin.github.io-builder.git`.
+5. `./bootstrap.sh` - will generate the site and place outputs into `www` dir.
 
 
 ### Commands
