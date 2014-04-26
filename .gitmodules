@@ -10,3 +10,6 @@
 [submodule "external/papa-carlo-media"]
 	path = external/papa-carlo-media
 	url = https://github.com/Eliah-Lakhin/papa-carlo-media
+[submodule "external/papa-carlo"]
+	path = external/papa-carlo
+	url = git@github.com:Eliah-Lakhin/papa-carlo.git

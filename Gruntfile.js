@@ -149,7 +149,17 @@ module.exports = function(grunt) {
                 src: ['**/*', '.nojekyll'],
                 filter: 'isFile',
                 dest: 'www/'
+            },
+
+            papaCarloDemo: {
+                expand: true,
+                cwd: 'external/papa-carlo/js/demo',
+                src: ['*.js', '*.html', '*.json',
+                    'target/scala-*/papa-carlo-opt.js'],
+                filter: 'isFile',
+                dest: 'www/projects/papa-carlo/demo/'
             }
+
         },
 
         less: {
@@ -246,7 +256,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-exec');
 
-    grunt.registerTask('compile', ['jade', 'copy:static', 'less']);
+    grunt.registerTask('compile', ['jade', 'copy', 'less']);
 
     grunt.registerTask('checkMessageArg', function() {
         if (!grunt.option('message')) {
