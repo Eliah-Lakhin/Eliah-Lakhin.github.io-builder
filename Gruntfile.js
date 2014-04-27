@@ -153,7 +153,7 @@ module.exports = function(grunt) {
 
             papaCarloDemo: {
                 expand: true,
-                cwd: 'external/papa-carlo/js/demo',
+                cwd: 'external/papa-carlo/demo',
                 src: ['*.js', '*.html', '*.json',
                     'target/scala-*/papa-carlo-opt.js'],
                 filter: 'isFile',
