@@ -183,7 +183,8 @@ module.exports = function(grunt) {
                 files: {
                     'www/theme.css': 'source/design/theme.less',
                     'www/home.css': 'source/design/home.less',
-                    'www/blog.css': 'source/design/blog.less'
+                    'www/blog.css': 'source/design/blog.less',
+                    'www/works.css': 'source/design/works.less'
                 }
             }
         },
