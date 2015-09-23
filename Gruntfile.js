@@ -78,11 +78,17 @@ module.exports = function(grunt) {
         jade: extend({
             home: jade('home', 'home.jade', 'index.html'),
 
-            page404: jade('page404', 'page404.jade', '404.html'),
+            about: jade('about', 'about.jade', 'about/index.html'),
+
+            contacts: jade('contacts', 'contacts.jade', 'contacts/index.html'),
+
+            portfolio: jade('portfolio', 'portfolio.jade', 'portfolio/index.html'),
 
             projects: jade('projects', 'projects.jade', 'projects/index.html'),
             'project-papa-carlo': jade('project-papa-carlo',
                 'projects/papa-carlo.jade', 'projects/papa-carlo/index.html'),
+
+            page404: jade('page404', 'page404.jade', '404.html'),
 
             blog: jade('blog', 'blog.jade', 'blog/index.html'),
 
