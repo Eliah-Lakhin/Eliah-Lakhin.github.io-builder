@@ -1,27 +1,28 @@
 {
-    "name": "personal-website-engine",
-    "version": "0.1.0",
-    "author": "Ilya Lakhin <eliah.lakhin@gmail.com>",
-    "description": "Static website compilation engine",
-    "contributors": [
-        {
-            "name": "Ilya Lakhin",
-            "email": "eliah.lakhin@gmail.com"
-        }
-    ],
-    "devDependencies": {
-        "marked": "~0.2.9",
-        "extend": "~1.2.1",
-        "grunt": "~0.4.1",
-        "grunt-contrib-watch": "~0.4.4",
-        "grunt-contrib-jade": "~0.8.0",
-        "grunt-contrib-connect": "~0.5.0",
-        "grunt-contrib-copy": "~0.4.1",
-        "grunt-contrib-less": "~0.8.1",
-        "highlight.js": "~7.4.0",
-        "grunt-exec": "~0.4.1"
-    },
-    "engines": {
-        "node": ">=0.10"
+  "name": "personal-website-engine",
+  "version": "0.1.0",
+  "author": "Ilya Lakhin <eliah.lakhin@gmail.com>",
+  "description": "Static website compilation engine",
+  "contributors": [
+    {
+      "name": "Ilya Lakhin",
+      "email": "eliah.lakhin@gmail.com"
     }
+  ],
+  "devDependencies": {
+    "marked": "0.2.9",
+    "extend": "1.2.1",
+    "grunt": "0.4.1",
+    "grunt-contrib-watch": "0.4.4",
+    "grunt-contrib-jade": "0.8.0",
+    "grunt-contrib-connect": "0.5.0",
+    "grunt-contrib-copy": "0.4.1",
+    "grunt-contrib-less": "0.8.1",
+    "grunt-latex": "1.0.0",
+    "highlight.js": "7.4.0",
+    "grunt-exec": "0.4.1"
+  },
+  "engines": {
+    "node": ">=0.10"
+  }
 }

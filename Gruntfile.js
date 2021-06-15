@@ -91,12 +91,6 @@ module.exports = function(grunt) {
             page404: jade('page404', 'page404.jade', '404.html'),
 
             blog: jade('blog', 'blog.jade', 'blog/index.html'),
-
-            rssRu: jade('blog', 'rss.jade', 'blog/feed-ru.rss', {},
-                {pretty: true}),
-
-            rssEn: jade('blog', 'rss.jade', 'blog/feed.rss',
-                {filterEnglish: true}, {pretty: true})
         }, (function() {
             var blogConfig = getConfig().pages.blog,
                 blogTasks = {};
@@ -201,7 +195,7 @@ module.exports = function(grunt) {
                     base: 'www',
                     hostname: '*',
                     port: 8000,
-                    livereload: 8080
+                    livereload: 3000
                 }
             }
         },
@@ -229,7 +223,7 @@ module.exports = function(grunt) {
 
             livereload: {
                 files: 'www/**/*',
-                options: {livereload: 8080}
+                options: {livereload: 3000}
             }
         },
 
