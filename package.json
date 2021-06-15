@@ -10,7 +10,7 @@
     }
   ],
   "devDependencies": {
-    "marked": "0.2.9",
+    "marked": "0.3.18",
     "extend": "1.2.1",
     "grunt": "0.4.1",
     "grunt-contrib-watch": "0.4.4",
